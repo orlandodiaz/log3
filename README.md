@@ -2,6 +2,7 @@
 
 [![codecov](https://codecov.io/gh/orlandodiaz/log3/branch/master/graph/badge.svg)](https://codecov.io/gh/orlandodiaz/log3)
 [![Build Status](https://travis-ci.com/orlandodiaz/log3.svg?branch=master)](https://travis-ci.com/orlandodiaz/log3)
+![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
 `Log3` makes it easier to log to python. `Log3` comes with a strong default
 logging configuration system so you don't configure them yourself.
