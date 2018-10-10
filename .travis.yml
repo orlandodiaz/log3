@@ -10,7 +10,7 @@ install:
   - pip install -r requirements.txt
   - pip install -r dev-requirements.txt
 script:
-  - python -m pytest -v
+  - python -m pytest --cov=log3 -v
 
 script:
   - codecov
