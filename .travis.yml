@@ -12,5 +12,5 @@ install:
 script:
   - python -m pytest --cov=log3 -v
 
-script:
+after_success:
   - codecov
