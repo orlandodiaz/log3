@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="log3",
-    version="0.1.0",
+    version="0.1.1",
     author="Orlando Diaz",
     author_email="orlandodiaz.dev@gmail.com",
     description="High level logging client builtin support for colored terminal output",
