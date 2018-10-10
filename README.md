@@ -1,5 +1,7 @@
 # Log3
 
+[![codecov](https://codecov.io/gh/orlandodiaz/log3/branch/master/graph/badge.svg)](https://codecov.io/gh/orlandodiaz/log3)
+
 `Log3` makes it easier to log to python. `Log3` comes with a strong default
 logging configuration system so you don't configure them yourself.
 
