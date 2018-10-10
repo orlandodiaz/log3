@@ -26,7 +26,7 @@ If you're working with the console a lot, log will display a colored output.
     log.log_to_file('file')
     log.info('logged to file')
 
-### Disable logging
+#### Disable logging
 
 You can quickly disable logging rather than hardcoding it into your logging
 configuration file.
