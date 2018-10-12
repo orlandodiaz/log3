@@ -1,7 +1,7 @@
 # Log3
 [![image](https://img.shields.io/pypi/v/log3.svg)](https://pypi.org/project/log3/)
 [![image](https://img.shields.io/pypi/pyversions/log3.svg)](https://pypi.org/project/log3/)
-[![codecov](https://codecov.io/gh/orlandodiaz/log3/branch/master/graph/badge.svg)](https://codecov.io/gh/orlandodiaz/log3)
+[![codecov](https://codecov.o/gh/orlandodiaz/log3/branch/master/graph/badge.svg)](https://codecov.io/gh/orlandodiaz/log3)
 [![Build Status](https://travis-ci.com/orlandodiaz/log3.svg?branch=master)](https://travis-ci.com/orlandodiaz/log3)
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
@@ -27,6 +27,7 @@ If you're working with the console a lot, log will display a colored output.
     log.error("This is an error")
 
 #### Log to file
+The `log_to_file` method will allow you to add a file handler to yor logging configuration
 
     log.log_to_file('file')
     log.info('logged to file')
