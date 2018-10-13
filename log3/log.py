@@ -2,26 +2,18 @@ import logging
 from colorama import Fore, Back, Style
 from logging.handlers import RotatingFileHandler
 import inspect
-import sys
+import os
+
 logger = logging.getLogger(__name__)
 root_logger = logging.getLogger('urllib3')
 stderr = None
 COLWIDTH = 10
-import os
 
 _fmt = '{color}[%(asctime)s {filename:>{colwidth}}] %(levelname)-7s - %(message)7s{end}'
 
 
-def configure_logger():
+def _configure_logger():
     if not logger.handlers:
-
-        # LOGGING FORMAT
-
-        # fmt = '[%(asctime)s %(filename){}s] %(levelname)-6s - %(message)7s'.format(COLWIDTH)
-        #
-        # # fmt = _fmt.format(colwidth=COLWIDTH, color='',end='',filename=filename)
-        # date_fmt = '%Y-%m-%d %H:%M:%S'
-        # formatter = logging.Formatter(fmt, datefmt=date_fmt)
 
         # STDERR LOGGING
         global stderr
@@ -36,91 +28,87 @@ def configure_logger():
 
 
 def _get_filename():
+    """ Get the calling module's filename"""
 
-    a = sys._getframe(2)
-    try:
-        filename = os.path.basename(a.f_locals['__file__'])
-    except KeyError:
-        filename = a.f_locals['__name__']
+    previous_frame = inspect.currentframe().f_back.f_back
+    (filename, line_number,
+     function_name, lines, index) = inspect.getframeinfo(previous_frame)
+
+    # log calls not enclosed in a function will return filename  instead of just input
+    if filename == '<input>':
+            filename =  previous_frame.f_locals['__file__']
+
+    filename = os.path.basename(filename)
 
     return filename
 
 
 def warning(msg, *args, **kwargs):
+    """ Log a warning """
 
-        fmt=_fmt.format(color=Fore.YELLOW, colwidth=COLWIDTH, filename=_get_filename(), end=Style.RESET_ALL)
+    fmt=_fmt.format(color=Fore.YELLOW, colwidth=COLWIDTH, filename=_get_filename(), end=Style.RESET_ALL)
 
-        date_fmt = '%Y-%m-%d %H:%M:%S'
-        formatter = logging.Formatter(fmt, datefmt=date_fmt)
+    date_fmt = '%Y-%m-%d %H:%M:%S'
+    formatter = logging.Formatter(fmt, datefmt=date_fmt)
 
-        # STDERR LOGGING
-        global stderr
-        stderr.setFormatter(formatter)
-        logger.warning(msg, *args, **kwargs)
+    # STDERR LOGGING
+    global stderr
+    stderr.setFormatter(formatter)
+    logger.warning(msg, *args, **kwargs)
 
-        # RESET THE LOGGING
-        fmt='[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s'
-        formatter2 = logging.Formatter(fmt, datefmt=date_fmt)
 
-        # STDERR LOGGING
-        stderr.setFormatter(formatter2)
+def boilerplate(fmt):
+    """ Boilerplate for the logging methods
+
+    This boilerplate code has common code logic
+
+    Args:
+        fmt: The formatter object
+
+    """
+
+    date_fmt = '%Y-%m-%d %H:%M:%S'
+    formatter = logging.Formatter(fmt, datefmt=date_fmt)
+
+    # STDERR LOGGING
+    global stderr
+    stderr.setFormatter(formatter)
 
 
 def error(msg, *args, **kwargs):
+    """ Log an error message"""
+
     fmt = _fmt.format(color=Fore.RED, colwidth=COLWIDTH, filename=_get_filename(), end=Style.RESET_ALL)
 
-    date_fmt = '%Y-%m-%d %H:%M:%S'
-    formatter = logging.Formatter(fmt, datefmt=date_fmt)
+    boilerplate(fmt)
+    logger.error(msg, *args, **kwargs)
 
-    # STDERR LOGGING
-    global stderr
-    stderr.setFormatter(formatter)
-    logger.info(msg, *args, **kwargs)
-
-    # RESET THE LOGGING
-    fmt = '[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s'
-    formatter2 = logging.Formatter(fmt, datefmt=date_fmt)
-
-    # STDERR LOGGING
-    stderr.setFormatter(formatter2)
 
 def info(msg, *args, **kwargs):
+
     fmt = _fmt.format(color=Fore.BLUE, colwidth=COLWIDTH, filename=_get_filename(), end=Style.RESET_ALL)
 
-    date_fmt = '%Y-%m-%d %H:%M:%S'
-    formatter = logging.Formatter(fmt, datefmt=date_fmt)
-
-    # STDERR LOGGING
-    global stderr
-    stderr.setFormatter(formatter)
+    boilerplate(fmt)
     logger.info(msg, *args, **kwargs)
 
-    # RESET THE LOGGING
-    fmt = '[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s'
-    formatter2 = logging.Formatter(fmt, datefmt=date_fmt)
-
-    # STDERR LOGGING
-    stderr.setFormatter(formatter2)
 
 def debug(msg, *args, **kwargs):
     fmt = _fmt.format(color=Fore.LIGHTBLACK_EX, colwidth=COLWIDTH, filename=_get_filename(), end=Style.RESET_ALL)
 
-    date_fmt = '%Y-%m-%d %H:%M:%S'
-    formatter = logging.Formatter(fmt, datefmt=date_fmt)
-
-    # STDERR LOGGING
-    global stderr
-    stderr.setFormatter(formatter)
+    boilerplate(fmt)
     logger.debug(msg, *args, **kwargs)
 
-    # RESET THE LOGGING
-    fmt = '[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s'
-    formatter2 = logging.Formatter(fmt, datefmt=date_fmt)
 
-    # STDERR LOGGING
-    stderr.setFormatter(formatter2)
+def success(msg, *args, **kwargs):
+    """ Custom log method meant to be used for successful operations"""
 
+    logging.addLevelName(15, 'SUCCESS')
 
+    fmt = _fmt.format(color=Fore.GREEN, colwidth=COLWIDTH, filename=_get_filename(), end=Style.RESET_ALL)
+
+    boilerplate(fmt)
+    if logger.isEnabledFor(15):
+        logger._log(15, msg, args, **kwargs)
 
 
 def log_to_file(log_path, logroot=True, limit=None):
@@ -152,12 +140,16 @@ def log_to_file(log_path, logroot=True, limit=None):
 
 
 def enable_logging():
-    """ Sets logging level to DEBUG"""
+    """ Sets logging level to the lowest (DEBUG) """
+
     logger.setLevel(logging.DEBUG)
 
+
 def disable_logging():
-    """ Sets logging level to WARNING"""
+    """ Sets logging level to the highest (WARNING) """
+
     logger.setLevel(logging.WARNING)
     root_logger.setLevel(logging.WARNING)
 
-configure_logger()
+
+_configure_logger()
