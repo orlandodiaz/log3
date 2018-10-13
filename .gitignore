@@ -1,0 +1,4 @@
+htmlcov/
+*.egg
+.idea/
+.pytest_cache/

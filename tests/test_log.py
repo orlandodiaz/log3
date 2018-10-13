@@ -2,10 +2,12 @@ import pytest
 
 import os
 
+
 @pytest.fixture
 def log():
     from log3 import log
     return log
+
 
 def test_log_info(capsys):
     from log3 import log
@@ -13,11 +15,13 @@ def test_log_info(capsys):
     log.info("info")
     _, stderr = capsys.readouterr()
 
+
 def test_log_error(capsys):
     from log3 import log
 
     log.error("error")
     _, stderr = capsys.readouterr()
+
 
 def test_log_debug(capsys):
     from log3 import log
@@ -26,6 +30,8 @@ def test_log_debug(capsys):
     _, stderr = capsys.readouterr()
 
     assert "debug" in stderr
+
+
 def test_log_warning(capsys):
     from log3 import log
 
@@ -34,13 +40,16 @@ def test_log_warning(capsys):
 
     assert "warning" in stderr
 
+
 def test_enable_logging(log):
     log.enable_logging()
     assert log.logger.level == 10
 
+
 def test_disable_logging(log):
     log.disable_logging()
     assert log.logger.level == 30
+
 
 def test_file_logging(log):
     # from log3 import log
