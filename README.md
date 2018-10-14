@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.com/orlandodiaz/log3.svg?branch=master)](https://travis-ci.com/orlandodiaz/log3)
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
+<img src="logging.png" height="150">
+
 `Log3` makes it easier to log messages in Python. It comes with a strong default
 logging configuration system so you don't configure them yourself.
 
