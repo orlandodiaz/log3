@@ -1,28 +1,39 @@
 import logging
+from .my_logger import Logger
+from .my_formatter import MyFormatter
+from logging.handlers import RotatingFileHandler
 
-logger = logging.getLogger(__name__)
-root_logger = logging.getLogger('urllib3')
+logger = Logger(__name__)
+urllib_logger = logging.getLogger('urllib3')
+
 
 def config():
     global logger
-    global root_logger
+    global urllib_logger
+
+    fmt = MyFormatter()
+
+    logging.addLevelName(15, 'SUCCESS')
 
     # STDERR LOGGING
     stderr = logging.StreamHandler()
-    fmt = '[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s'
+    # fmt = '[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s'
     date_fmt = '%Y-%m-%d %H:%M:%S'
     formatter = logging.Formatter(fmt, datefmt=date_fmt)
-    stderr.setFormatter(formatter)
+    stderr.setFormatter(fmt)
     logger.addHandler(stderr)
     logger.setLevel(logging.DEBUG)
 
-    root_logger.addHandler(stderr)
-    root_logger.setLevel(logging.DEBUG)
+    urllib_logger.addHandler(stderr)
+    urllib_logger.setLevel(logging.DEBUG)
 
 
-    ########## LOG TO FILE ################
-    log_path = 'myloggingfile'
-    limit=None
+config()
+
+
+def log_to_file(log_path, log_urllib=False, limit=None):
+    """ Add file_handler to logger"""
+    log_path = log_path
     file_handler = logging.FileHandler(log_path)
     if limit:
         file_handler = RotatingFileHandler(log_path, mode='a', maxBytes=limit * 1024 * 1024,
@@ -33,4 +44,6 @@ def config():
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
     print('this got printed')
-config()
+    if log_urllib:
+        urllib_logger.addHandler(file_handler)
+        urllib_logger.setLevel(logging.DEBUG)
