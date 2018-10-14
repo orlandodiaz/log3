@@ -1,6 +1,7 @@
 import pytest
 
 import os
+# from log3 import log_to_file
 
 
 @pytest.fixture
@@ -23,7 +24,7 @@ def test_log_error(capsys):
     _, stderr = capsys.readouterr()
 
 
-def test_log_debug(capsys):
+def test_log_debug(capsys, log):
     from log3 import log
 
     log.debug("debug")
@@ -43,22 +44,25 @@ def test_log_warning(capsys):
 
 def test_enable_logging(log):
     log.enable_logging()
-    assert log.logger.level == 10
+    assert log.level == 10
 
 
 def test_disable_logging(log):
     log.disable_logging()
-    assert log.logger.level == 30
+    assert log.level == 30
 
 
 def test_file_logging(log):
-    # from log3 import log
+    from log3 import log
+    from log3 import log_to_file
 
-    log.log_to_file('/tmp/mylog')
     log.enable_logging()
+
+    file = open('/tmp/mylog', 'w+')
+    log_to_file('/tmp/mylog')
+
     log.info('logged to file')
 
-    file = open('/tmp/mylog', 'r+')
     try:
         line1 = file.readline()
         # os.system('say hi {}'.format(line1))
