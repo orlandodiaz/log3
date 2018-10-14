@@ -26,17 +26,19 @@ You can install `Log3` using pip:
 
 ## Usage
 
- To start logging it is as simple as importing the `log` logger object and issuing the logging
- commands:
+To start logging it is as simple as importing the `log` logger object and issuing the logging
+commands:
 
-    from log3 import log
+```python
+from log3 import log
 
-    log.info("Hello world")
-    log.success("This message was successful")
-    log.debug("This is a debug message")
-    log.warning("This is a warning")
-    log.error("This is an error")
-    log.critical("This is  a critical error")
+log.info("Hello world")
+log.success("This message was successful")
+log.debug("This is a debug message")
+log.warning("This is a warning")
+log.error("This is an error")
+log.critical("This is  a critical error")
+```
 
 
 #### Log to file
