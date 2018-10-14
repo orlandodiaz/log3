@@ -43,7 +43,6 @@ def log_to_file(log_path, log_urllib=False, limit=None):
     formatter = logging.Formatter(fmt, datefmt=date_fmt)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
-    print('this got printed')
     if log_urllib:
         urllib_logger.addHandler(file_handler)
         urllib_logger.setLevel(logging.DEBUG)
