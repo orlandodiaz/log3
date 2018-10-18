@@ -67,3 +67,9 @@ To enable logging again it is also that simple:
 
     log.enable_logging()
 
+## Author(s)
+- orlandodiaz
+## Copyright
+Copyright (c) 2018 Orlando Diaz
+
+For more info see LICENSE
