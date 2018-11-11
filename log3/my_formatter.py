@@ -13,37 +13,54 @@ class MyFormatter(logging.Formatter):
     critical_fmt = _fmt.format(color=Fore.LIGHTRED_EX, colwidth=10, end=Style.RESET_ALL)
 
     def __init__(self):
-        super().__init__(fmt="%(levelno)d: %(msg)s", datefmt=None, style='%')
+        super(MyFormatter, self).__init__(fmt="%(levelno)d: %(msg)s", datefmt=None)
 
     def format(self, record):
 
         # Save the original format configured by the user
         # when the logger formatter was instantiated
-        format_orig = self._style._fmt
+        try:
+            format_orig = self._style._fmt
+        except AttributeError:
+            format_orig = self._fmt
 
         # Replace the original format with one customized by logging level
         if record.levelno == logging.DEBUG:
-            self._style._fmt = MyFormatter.dbg_fmt
+            if hasattr(self, '_style'): self._style._fmt = MyFormatter.dbg_fmt
+            self._fmt = MyFormatter.dbg_fmt
+
 
         elif record.levelno == logging.INFO:
-            self._style._fmt = MyFormatter.info_fmt
+            if hasattr(self, '_style'): self._style._fmt = MyFormatter.info_fmt
+            self._fmt = MyFormatter.info_fmt
+
 
         elif record.levelno == logging.ERROR:
-            self._style._fmt = MyFormatter.err_fmt
+            if hasattr(self, '_style'): self._style._fmt = MyFormatter.err_fmt
+            self._fmt = MyFormatter.err_fmt
+
         elif record.levelno == logging.WARNING:
-            self._style._fmt = MyFormatter.warning_fmt
+            if hasattr(self, '_style'): self._style._fmt = MyFormatter.warning_fmt
+            self._fmt = MyFormatter.warning_fmt
+
 
         elif record.levelno == 15:
-            self._style._fmt = MyFormatter.success_fmt
+            if hasattr(self, '_style'): self._style._fmt = MyFormatter.success_fmt
+            self._fmt = MyFormatter.success_fmt
+
 
         elif record.levelno == logging.CRITICAL:
-            self._style._fmt = MyFormatter.critical_fmt
+            if hasattr(self, '_style'): self._style._fmt = MyFormatter.critical_fmt
+            self._fmt = MyFormatter.critical_fmt
+
 
         # Call the original formatter class to do the grunt work
         result = logging.Formatter.format(self, record)
 
         # Restore the original format configured by the user
-        self._style._fmt = format_orig
+        if hasattr(self, '_style'):
+            self._style._fmt = format_orig
+        self._fmt = format_orig
 
         return result
 
