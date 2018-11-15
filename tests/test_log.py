@@ -26,6 +26,7 @@ def test_log_error(capsys):
 
 def test_log_debug(capsys, log):
     from log3 import log
+    log.setLevel('DEBUG')
 
     log.debug("debug")
     _, stderr = capsys.readouterr()
@@ -70,5 +71,3 @@ def test_file_logging(log):
     finally:
         file.close()
         os.remove('/tmp/mylog')
-
-
