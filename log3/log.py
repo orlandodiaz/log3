@@ -17,7 +17,7 @@ def config():
 
     # STDERR LOGGING
     stderr = logging.StreamHandler()
-    # fmt = '[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s'
+    fmt = '[%(asctime)s %(filename)18s] %(levelname)-7s - %(message)7s'
     date_fmt = '%Y-%m-%d %H:%M:%S'
     formatter = logging.Formatter(fmt, datefmt=date_fmt)
     stderr.setFormatter(fmt)
